@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "tradeRoute": {
+      "title": "Trade Route",
+      "description": "A shipping route between two ports with associated risk metrics.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "origin": { "type": "string" },
+        "destination": { "type": "string" },
+        "riskScore": { "type": "number" },
+        "portCongestionRisk": { "type": "number" },
+        "weatherRisk": { "type": "number" },
+        "freightRateRisk": { "type": "number" },
+        "riskLevel": { "enum": ["Critical", "Warning", "Safe"] },
+        "trend": { "enum": ["up", "down", "stable"] },
+        "recommendedDepartureStart": { "type": "string", "format": "date-time" },
+        "recommendedDepartureEnd": { "type": "string", "format": "date-time" },
+        "recommendedConfidence": { "type": "number" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      },
+      "required": ["origin", "destination", "riskScore", "riskLevel"]
+    },
+    "alert": {
+      "title": "Alert",
+      "description": "A notification about a disruption on a specific route.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "routeId": { "type": "string" },
+        "routeLabel": { "type": "string" },
+        "disruptionType": { "enum": ["Port Congestion", "Weather", "Rate Spike", "Strike", "Capacity Shortage"] },
+        "severity": { "enum": ["Critical", "High", "Medium", "Low"] },
+        "affectedWindowStart": { "type": "string", "format": "date-time" },
+        "affectedWindowEnd": { "type": "string", "format": "date-time" },
+        "description": { "type": "string" },
+        "status": { "enum": ["New", "Acknowledged", "Resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["routeId", "disruptionType", "severity", "status"]
+    },
+    "riskHistory": {
+      "title": "Risk History",
+      "description": "Historical risk scores for a route.",
+      "type": "object",
+      "properties": {
+        "routeId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "riskScore": { "type": "number" }
+      },
+      "required": ["routeId", "date", "riskScore"]
+    }
+  },
+  "firestore": {
+    "tradeRoutes": {
+      "schema": { "$ref": "#/entities/tradeRoute" },
+      "description": "Collection of trade routes."
+    },
+    "alerts": {
+      "schema": { "$ref": "#/entities/alert" },
+      "description": "Collection of disruption alerts."
+    },
+    "riskHistory": {
+      "schema": { "$ref": "#/entities/riskHistory" },
+      "description": "Collection of historical risk data."
+    }
+  }
+}
