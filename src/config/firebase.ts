@@ -20,7 +20,13 @@ const firebaseConfig = {
 };
 
 // Check if configuration is actually missing (true placeholders)
-const isConfigMissing = Object.values(firebaseConfig).some(val => val === "REPLACE_ME" || !val);
+const configValues = [
+  firebaseConfig.apiKey,
+  firebaseConfig.authDomain,
+  firebaseConfig.projectId,
+  firebaseConfig.appId
+];
+const isConfigMissing = configValues.some(val => val === "REPLACE_ME" || !val);
 
 if (isConfigMissing && import.meta.env.PROD) {
   console.warn("Firebase configuration is missing or incomplete. Some features may not work.");

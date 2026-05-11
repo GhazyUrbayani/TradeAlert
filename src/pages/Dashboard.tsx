@@ -60,6 +60,14 @@ export const Dashboard: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // Safety timeout to prevent infinite loading screen
+    const timeout = setTimeout(() => {
+      if (loading) {
+        setLoading(false);
+        console.warn("Loading timeout reached. Forcing UI render.");
+      }
+    }, 8000);
+
     // Only fetch data - no strict user check needed for display due to public rules
     setLoading(true);
     const routesPath = 'tradeRoutes';
@@ -85,6 +93,7 @@ export const Dashboard: React.FC = () => {
     });
 
     return () => {
+      clearTimeout(timeout);
       unsubRoutes();
       unsubAlerts();
     };
