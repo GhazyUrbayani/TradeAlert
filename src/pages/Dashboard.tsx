@@ -93,6 +93,8 @@ export const Dashboard: React.FC = () => {
   const criticalRoutes = routes.filter(r => r.riskLevel === 'Critical').length;
   const warningRoutes = routes.filter(r => r.riskLevel === 'Warning').length;
 
+  const isAdminUser = user?.email === 'ghazyurbayani@gmail.com';
+
   const [search, setSearch] = useState('');
 
   const filteredRoutes = routes.filter(r => 
@@ -125,15 +127,19 @@ export const Dashboard: React.FC = () => {
           </div>
           <div>
             <h1 className="font-display-lg text-display-lg text-on-surface">Welcome to TradeAlert SEA</h1>
-            <p className="font-body-lg text-on-surface-variant max-w-md mx-auto mt-2">
-              The platform is ready. If you are the administrator, please sign in and seed the initial corridors.
+            <p className="font-body-lg text-on-surface-variant max-w-lg mx-auto mt-2">
+              The intelligence platform is ready. Guests can view disruption data once the administrator completes the initial regional corridor seeding.
             </p>
           </div>
           <div className="flex gap-4">
              {!user ? (
-               <button onClick={() => signInWithGoogle()} className="px-6 py-3 bg-primary text-on-primary rounded-lg font-label-caps text-label-caps">Admin Login</button>
+               <button onClick={() => signInWithGoogle()} className="px-8 py-3 bg-primary text-on-primary rounded-lg font-label-caps text-label-caps hover:brightness-110 transition-all shadow-lg active:scale-95">Admin Login</button>
+             ) : isAdminUser ? (
+               <button onClick={() => seedFirestore()} className="px-8 py-3 bg-secondary text-on-secondary rounded-lg font-label-caps text-label-caps hover:brightness-110 transition-all shadow-lg animate-pulse active:scale-95">Seed Data Corridors</button>
              ) : (
-               <button onClick={() => seedFirestore()} className="px-6 py-3 bg-secondary text-on-secondary rounded-lg font-label-caps text-label-caps">Seed Koridor Sekarang</button>
+               <div className="p-4 bg-surface-container rounded-lg border border-outline-variant text-on-surface-variant font-body-sm italic">
+                  Database empty. Please ask the administrator ({'ghazyurbayani@gmail.com'}) to initialize the data.
+               </div>
              )}
           </div>
         </div>
@@ -154,12 +160,14 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-        <button 
-          onClick={() => seedFirestore()}
-          className="text-xs text-on-surface-variant hover:text-primary transition-colors italic underline"
-        >
-          Re-seed data
-        </button>
+        {isAdminUser && (
+          <button 
+            onClick={() => seedFirestore()}
+            className="text-xs text-on-surface-variant hover:text-primary transition-colors italic underline"
+          >
+            Manage Data (Seed)
+          </button>
+        )}
       </div>
 
       {/* KPI Section */}

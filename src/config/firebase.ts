@@ -1,24 +1,25 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import appletConfig from '../../firebase-applet-config.json';
 
 /**
  * FIREBASE SETUP - TradeAlert SEA
  * 
- * Replace the configuration object below with your actual Firebase project settings.
- * You can find these in your Firebase Console -> Project Settings -> General -> Your apps.
+ * In development (AI Studio), we default to the auto-generated config.
+ * In production/manual setup, use environment variables.
  */
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "REPLACE_ME",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "REPLACE_ME",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "REPLACE_ME",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "REPLACE_ME",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "REPLACE_ME",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "REPLACE_ME"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || appletConfig.apiKey || "REPLACE_ME",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || appletConfig.authDomain || "REPLACE_ME",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || appletConfig.projectId || "REPLACE_ME",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || appletConfig.storageBucket || "REPLACE_ME",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || appletConfig.messagingSenderId || "REPLACE_ME",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || appletConfig.appId || "REPLACE_ME"
 };
 
-// Check if configuration is missing (placeholder values)
+// Check if configuration is actually missing (true placeholders)
 const isConfigMissing = Object.values(firebaseConfig).some(val => val === "REPLACE_ME" || !val);
 
 if (isConfigMissing && import.meta.env.PROD) {
@@ -26,7 +27,7 @@ if (isConfigMissing && import.meta.env.PROD) {
 }
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+export const db = getFirestore(app, (appletConfig as any).firestoreDatabaseId || "(default)");
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 

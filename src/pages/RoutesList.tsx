@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db, auth } from '../config/firebase';
 import { TradeRoute } from '../types';
 import { RouteTable } from '../components/ui/RouteTable';
 import { Search, Ship, Filter, Download, Plus } from 'lucide-react';
@@ -31,6 +31,8 @@ export const RoutesList: React.FC = () => {
     r.destination.toLowerCase().includes(search.toLowerCase())
   );
 
+  const isAdminUser = auth.currentUser?.email === 'ghazyurbayani@gmail.com';
+
   if (loading && routes.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-[70vh]">
@@ -48,15 +50,20 @@ export const RoutesList: React.FC = () => {
           <p className="font-body-lg text-on-surface-variant">Comprehensive directory of monitored lanes and their current risk status.</p>
         </div>
         <div className="flex gap-2">
-          <button className="flex items-center gap-2 px-4 py-2 bg-surface-container border border-outline-variant rounded font-label-caps text-label-caps text-on-surface hover:bg-surface-container-high transition-all">
+          <button 
+             onClick={() => alert("Generating corridor report PDF...")}
+             className="flex items-center gap-2 px-4 py-2 bg-surface-container border border-outline-variant rounded font-label-caps text-label-caps text-on-surface hover:bg-surface-container-high hover:border-outline focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+          >
              <Download size={14} /> Export Report
           </button>
-          <button 
-             onClick={() => seedFirestore()}
-             className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded font-label-caps text-label-caps hover:brightness-110 transition-all shadow-lg"
-          >
-             <Plus size={14} /> New Manual Entry
-          </button>
+          {isAdminUser && (
+            <button 
+               onClick={() => seedFirestore()}
+               className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded font-label-caps text-label-caps hover:brightness-110 active:scale-95 transition-all shadow-lg cursor-pointer"
+            >
+               <Plus size={14} /> New Manual Entry
+            </button>
+          )}
         </div>
       </div>
 
@@ -66,19 +73,25 @@ export const RoutesList: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" size={18} />
             <input 
               type="text" 
-              placeholder="Filter by port or region..."
+              placeholder="Search by port, country, or region..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded font-body-md text-on-surface focus:border-primary outline-none"
+              className="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded font-body-md text-on-surface focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/10 outline-none transition-all"
             />
           </div>
           <div className="flex items-center gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-label-caps text-[10px]">
+             <button 
+                onClick={() => setSearch('')}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-label-caps text-[10px] cursor-pointer hover:bg-primary/20 transition-colors"
+             >
                 <Ship size={12} /> All Lanes
-             </div>
-             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] cursor-pointer transition-colors">
+             </button>
+             <button 
+                onClick={() => alert("Filter: Priority Lanes coming soon")}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-surface-container-high text-on-surface-variant border border-transparent hover:border-outline-variant font-label-caps text-[10px] cursor-pointer transition-all"
+             >
                 <Filter size={12} /> Priority Only
-             </div>
+             </button>
           </div>
         </div>
 

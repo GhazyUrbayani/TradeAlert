@@ -21,7 +21,17 @@ TradeAlert SEA is a real-time risk assessment dashboard for regional trade corri
 
 ## Database Initialization
 
-Seed the Firestore database with initial regional corridors and mock alerts:
+There are two ways to seed the initial trade corridor data:
+
+### Method A: UI (Easiest)
+1. Open the app in your browser.
+2. Click **Admin Login** and sign in as `ghazyurbayani@gmail.com`.
+3. Click **Seed Data Corridors** on the welcome screen.
+
+### Method B: CLI (Advanced)
+1. Download a Service Account JSON from Firebase Console (Project Settings > Service Accounts).
+2. Save it as `service-account.json` in the project root.
+3. Run the following command:
 ```bash
 npx ts-node scripts/seedFirestore.ts
 ```

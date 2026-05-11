@@ -68,10 +68,16 @@ export const Alerts: React.FC = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <button className="px-4 py-2 font-label-caps text-label-caps border border-outline-variant rounded text-on-surface hover:bg-surface-container-high transition-colors flex items-center gap-2">
+          <button 
+            onClick={() => alert("Exporting all active alerts to Excel/PDF...")}
+            className="px-4 py-2 font-label-caps text-label-caps border border-outline-variant rounded text-on-surface hover:bg-surface-container-high hover:border-outline transition-all flex items-center gap-2 cursor-pointer"
+          >
             <Download size={14} /> Export Report
           </button>
-          <button className="px-4 py-2 font-label-caps text-label-caps bg-primary text-on-primary rounded shadow-lg hover:brightness-110 transition-all flex items-center gap-2">
+          <button 
+            onClick={() => alert("All alerts marked as read.")}
+            className="px-4 py-2 font-label-caps text-label-caps bg-primary text-on-primary rounded shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+          >
             <CheckCircle size={14} /> Mark All Read
           </button>
         </div>
@@ -178,13 +184,25 @@ export const Alerts: React.FC = () => {
               <div className="p-4 border-t border-outline-variant bg-surface-container flex gap-3 rounded-b-xl">
                 <button 
                   onClick={() => handleAnalyze(selectedAlert.id)}
-                  className="flex-1 py-3 font-label-caps text-label-caps bg-primary text-on-primary rounded shadow-lg hover:brightness-110 transition-all font-bold flex items-center justify-center gap-2"
+                  className="flex-1 py-3 font-label-caps text-label-caps bg-primary text-on-primary rounded shadow-lg hover:brightness-110 transition-all font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                 >
-                  <ExternalLink size={14} /> Analyze Impact
+                  <Zap size={14} /> Analyze Impact
                 </button>
-                <button className="flex-1 py-3 font-label-caps text-label-caps border border-outline-variant text-on-surface rounded hover:bg-surface-container-high transition-colors font-bold">
-                  Acknowledge
-                </button>
+                <div className="flex flex-1 gap-2">
+                  <button 
+                    onClick={() => alert(`Alert ID ${selectedAlert.id} acknowledged.`)}
+                    className="flex-1 py-3 font-label-caps text-label-caps border border-outline-variant text-on-surface rounded hover:bg-surface-container-high hover:border-outline transition-all font-bold cursor-pointer"
+                  >
+                    Acknowledge
+                  </button>
+                  <button 
+                    onClick={() => alert(`Rescheduling impact analysis window...`)}
+                    className="flex-[0.5] py-3 font-label-caps text-label-caps border border-outline-variant text-on-surface-variant rounded hover:bg-surface-container-high transition-all flex items-center justify-center cursor-pointer"
+                    title="Reschedule Analysis"
+                  >
+                    <Clock size={16} />
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
