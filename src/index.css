@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Brand Colors from spec */
+  --color-background: #0F1117;
+  --color-surface: #051424;
+  --color-surface-container: #1A1D27;
+  --color-surface-container-high: #1c2b3c;
+  --color-surface-container-highest: #273647;
+  --color-surface-container-lowest: #010f1f;
+  --color-surface-container-low: #0d1c2d;
+  --color-primary: #3B82F6; /* Standard Blue per spec, adjusting to #adc6ff for M3 look if needed, but keeping #3B82F6 */
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1e3a8a;
+  --color-secondary: #4edea3;
+  --color-on-secondary: #003824;
+  --color-tertiary: #ffb786;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-surface: #d4e4fa;
+  --color-on-surface-variant: #c2c6d6;
+  --color-outline: #8c909f;
+  --color-outline-variant: #2D3343; /* From spec */
+
+  --spacing-gutter: 20px;
+  --spacing-container_margin: 32px;
+  --spacing-stack_sm: 8px;
+  --spacing-stack_md: 16px;
+  --spacing-stack_lg: 24px;
+  --spacing-sidebar_width: 260px;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-sans;
+  }
+}
+
+@layer components {
+  .font-display-lg {
+    @apply font-sans font-bold text-4xl tracking-tight;
+  }
+  .font-headline-md {
+    @apply font-sans font-semibold text-2xl tracking-tight;
+  }
+  .font-headline-sm {
+    @apply font-sans font-semibold text-lg;
+  }
+  .font-body-lg {
+    @apply font-sans text-base;
+  }
+  .font-body-md {
+    @apply font-sans text-sm;
+  }
+  .font-body-sm {
+    @apply font-sans text-[13px];
+  }
+  .font-label-caps {
+    @apply font-sans text-[11px] font-semibold uppercase tracking-wider;
+  }
+  .font-mono-data {
+    @apply font-mono text-[13px] font-medium;
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-surface-container-highest rounded-full;
+  }
+}
+
+.recharts-cartesian-grid-horizontal line, .recharts-cartesian-grid-vertical line {
+  stroke: var(--color-outline-variant);
+  stroke-opacity: 0.3;
+}

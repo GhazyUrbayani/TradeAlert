@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isAdmin() { 
+      // Keep admin restricted to your email for seed management
+      return isSignedIn() && request.auth.token.email_verified == true && request.auth.token.email == 'ghazyurbayani@gmail.com'; 
+    }
+
+    // --- Collection Rules ---
+
+    match /tradeRoutes/{routeId} {
+      // Allow PUBLIC READ for demo/jury evaluation
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /alerts/{alertId} {
+      // Allow PUBLIC READ for demo/jury evaluation
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /riskHistory/{historyId} {
+      // Allow PUBLIC READ for demo/jury evaluation
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+  }
+}
